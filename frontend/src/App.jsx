@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Plus, Trash2, Loader2, Calendar, AlertCircle } from "lucide-react";
 
-
 function App() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -12,14 +11,11 @@ function App() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Get API URL from environment variables
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
-
   async function getNotes() {
     try {
       setLoading(true);
       setError("");
-      const response = await axios.get(`${API_URL}/notes`);
+      const response = await axios.get("http://localhost:8080/notes");
       setNotes(response.data.data);
     } catch (err) {
       setError("Failed to fetch notes. Please try again.");
@@ -39,7 +35,7 @@ function App() {
     try {
       setAdding(true);
       setError("");
-      await axios.post(`${API_URL}/add`, {
+      await axios.post("http://localhost:8080/add", {
         title: title.trim(),
         content: content.trim()
       });
@@ -62,7 +58,7 @@ function App() {
     if (!window.confirm("Are you sure you want to delete this note?")) return;
 
     try {
-      await axios.delete(`${API_URL}/notes/${id}`);
+      await axios.delete(`http://localhost:8080/notes/${id}`);
       setSuccess("Note deleted successfully!");
       setTimeout(() => setSuccess(""), 3000);
       getNotes();
@@ -285,11 +281,13 @@ function App() {
 
         {/* Footer */}
         <footer className="mt-8 text-center text-gray-500 text-sm">
-          <p>&copy; {new Date().getFullYear()} Notes App. All rights reserved.</p>
-        </footer>
+  <p>&copy; {new Date().getFullYear()} Notes App. All rights reserved.</p>
+</footer>
       </div>
     </div>
   );
 }
 
 export default App;
+
+
